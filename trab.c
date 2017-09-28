@@ -66,6 +66,7 @@ int main(){
     char desc[15] = "iis03us10";
    
     Estrutura vet[2];
+	printf("OI"); 
 
     /*  obs que primeiro argumento deve ser menor q 255 para dar certo
          pois estamos assumindo q ocupara um byte so, depois otimizar para
