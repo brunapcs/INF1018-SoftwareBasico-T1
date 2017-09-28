@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*kasdnas skdnk */
+
 typedef struct s {
     int  i;
     char s1[5];
