@@ -6,26 +6,24 @@
 int main(){
 
 	//int num=2, i=0; //numero de arrays da estrutura
-    char desc[4] = "s03";
+    char desc[4] = "ii";
     unsigned char cab;
 
     /***** [INÍCIO] Abertura do Arquivo *****/
         
-	FILE *arq = fopen ("Arquivo.txt", "wb");
-	if (arq == NULL){
+	FILE *file = fopen ("arquivo.txt", "wb");
+	if (file == NULL){
         printf("Problemas na abertura do arquivo\n");
         exit(1);
-  	}
-  	
+  	}  	
   	
   	cab = cabecalho(desc);
-  	
-  	fwrite (&cab, sizeof(char), 1, arq);
+  	fwrite (&cab, sizeof(char), 1, file);
     
     /***** [FIM] Abertura do Arquivo *****/
 
    
    
-	fclose (arq);
+	fclose (file);
 	return 0;
 } 
