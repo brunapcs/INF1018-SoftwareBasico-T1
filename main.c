@@ -6,12 +6,10 @@
 int main(){
 
 	//int num=2, i=0; //numero de arrays da estrutura
-    char desc[2] = "i";
-    char c1 [5] = "2593";
-    unsigned int i = 32768;
-    char s[5];
-    strcpy(s,c1);
+    char desc[2] = "u";
+    int i = 256;
     unsigned char cab;
+    char bytes;
 
     /***** [INÍCIO] Abertura do Arquivo *****/
         
@@ -21,7 +19,7 @@ int main(){
         exit(1);
   	}  	
   	
-  	cab = cabecalho(&i, desc);
+  	cab = cabecalho(&i, desc, &bytes);
   	fwrite (&cab, sizeof(char), 1, file);
     
     /***** [FIM] Abertura do Arquivo *****/
