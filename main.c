@@ -6,10 +6,19 @@
 int main(){
 
 	//int num=2, i=0; //numero de arrays da estrutura
-    char desc[2] = "u";
-    int i = 256;
-    unsigned char cab;
-    char bytes;
+    int nstructs=2;
+    char descritor[6] = "is05u";
+    Estrutura est[2];
+    
+    est[0].i = 0xdf;
+    strcpy(est[0].s, "abcd");
+    est[0].u = 0x1b4;
+    
+    est[1].i = 250;
+    strcpy(est[1].s, "0123");
+    est[1].u = 1232436;
+    
+    
 
     /***** [INÍCIO] Abertura do Arquivo *****/
         
@@ -19,10 +28,10 @@ int main(){
         exit(1);
   	}  	
   	
-  	cab = cabecalho(&i, desc, &bytes);
-  	fwrite (&cab, sizeof(char), 1, file);
+  	/***** [FIM] Abertura do Arquivo *****/
+  	
+  	gravacomp(nstructs, est, descritor, file);
     
-    /***** [FIM] Abertura do Arquivo *****/
 
    
    

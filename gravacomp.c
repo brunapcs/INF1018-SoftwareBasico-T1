@@ -3,6 +3,8 @@
 #include <math.h>
 #include "gravacomp.h"
 
+
+
 /* [INÍCIO] FUNÇÕES STATIC ( AUXILIARES ) */
 
 /*static char defineTamanho(char* descritor){						// funcao para calcular o tamanho de uma struct
@@ -58,45 +60,116 @@ static char contaBytesSigned(int x){							// função auxiliar para calculo do 
 
 /* [FIM] FUNÇÕES STATIC ( AUXILIARES ) */
 
+int gravacomp (int nstructs, void* valores, char* descritor, FILE *arquivo){
+	unsigned char c; 									// inicializando byte de cabecalho
+	char* desc;									
+	char nstructs_c = nstructs;
 
-unsigned char cabecalho (void* valores, char* descritor, char* bytes){
-	unsigned char c = 0x00; 						// inicializando byte de cabecalho
-	unsigned char d = descritor[0];					// pegando o primeiro elemento (byte) da string descritor
 	
-    if (d != 's'){
-        if (d == 'i'){								// se for signed int
-		    int *aux = valores;
-		    c |= 0x20; 								// 0x20 = 0[01]0 0000
-		    *bytes = contaBytesSigned(*aux);
-        }
+	fwrite(&nstructs_c, sizeof(char), 1, arquivo); 		// Primeiro byte do arquivo com nstructs.	
+	
+	while(nstructs){
+		desc = descritor;									// variável auxiliar para o descritor
+	
+		while(desc[0] != '\0'){
+			c = 0x00;										// inicializando byte de cabeçalho
+			char bytes;
+		
+			if (desc[0] != 's'){
+			
+				if (desc[0] == 'i'){						// se for signed int
+					int* aux = valores;						
+					c |= 0x20; 								// 0x20 = 0[01]0 0000
+					bytes = contaBytesSigned(*aux);
+					c |= bytes;								// grava o valor de bytes no cabeçalho					 
+				}
+				else{										// se for unsigned int
+			  		unsigned int* aux = valores;
+			  		bytes = contaBytesUnsigned(*aux);
+			  		c |= bytes;								// grava o valor de bytes no cabeçalho
+			  	}
+			  	
+			  	desc ++;
+				if (desc[0] == '\0')						// se esse for o último campo do descritor, o 7º bit é ligado
+					c |= 0x80;								// c = 1000 0000.
+				
+				fwrite(&c, sizeof(char), 1, arquivo);
+			
+				valores = valores + (bytes - 1);			// faz valores apontar para o ultimo byte gravavel (mais signific)
+				for (int i = 0; i < bytes; i++){
+					fwrite(valores, sizeof(char), 1 , arquivo);	// big endian
+					valores--;									//valores-- até apontar para uma pos antes do inicio
+				}
+				valores = valores + 4 + 1;						// valores agora aponta para o início do próximo dado.
+			}  
 
-	  	else{										// se for unsigned int
-	  		unsigned int* aux = valores;
-	  		*bytes = contaBytesUnsigned(*aux);
-	  	}
-	  	c |= *bytes;								// grava o valor de bytes no cabeçalho
-	  	descritor ++;
-    }  
-    
-    else {																	// se for string
-		c |= 0x40; 															// 0[1]00 0000
-    	unsigned char aux = (descritor[1] - 48)*10  + (descritor[2] - 48); 	// pega o tamanho da string 
-    	c |= aux;    														//(-48 pq 0 na ASCII é 48)
-    	descritor +=3;														// pula 3 posicoes (proximo campo da struct)
-    	
-    }
-    
-    if (descritor[0] == '\0' ) 						// se esse for o último campo do descritor, o 7º bit é ligado
-			c |= 0x80;								// c = 1000 0000.
-    
-	return c;
+			else{											// se for string
+				char *aux = valores;
+				char tamanho = 0;
+				tamanho = (desc[1] - 48)*10 + desc[2] - 48; //pegando o tamanho da string (s03 dá 3 por exemplo)
+				bytes = 0; 	
+				c |= 0x40;									// 0[1]00 0000	
+	
+				while(*aux != '\0'){ 						// pega o tamanho da string 
+					bytes++; 
+					aux++; 
+				}
+	
+				desc += 3;									//pula 3 posiçoes(prox campo da struct) 
+	
+				if (desc[0] == '\0' ) 						// se esse for o último campo do descritor, o 7º bit é ligado
+					c |= 0x80;								// c = 1000 0000.
+	
+				c |= bytes; 
+		
+				fwrite(&c, sizeof(char), 1 , arquivo); 		//escreve no arquivo cabecalho
+			
+				for(int i = 0; i < bytes ; i ++) {
+					fwrite(valores, sizeof(char), 1 , arquivo ); 	//escreve no arquivo todos os campos da string
+					valores ++;
+				}
+			
+				valores = valores - bytes;
+			
+				char padding;
+				padding = (tamanho/4) * 4 + 4 - tamanho % 4 + 1;	// tamanho/4 dá um inteiro. é a qtd de bytes inteiros
+				valores = valores + padding ;						// ocupados. vezes 4 do padding. mais 4-tamanho mod 4 p/ 
+			}														// descobrir qts bytes de padding estao sozinhos. 
+		}
+		nstructs--;
+	}
+	
+	return 1;
 }
 
-int gravacomp (int nstructs, void* valores, char* descritor, FILE* arq){
 
-	unsigned char nstructs_c = nstructs; 			// convertendo para um unsigned char
-    fwrite(&nstructs_c, sizeof(char), 1, arq); 		// Primeiro byte do arquivo.
+
+
+
+
+
+
+
+
+
+
+
+
+
+//int gravacomp (int nstructs, void* valores, char* descritor, FILE* arq){
+
+    //fwrite(&nstructs_c, sizeof(char), 1, arq); 		// Primeiro byte do arquivo.
+    //unsigned char *cab;
+    //char bytes;
     
+   	/*while (nstructs--){	
+   		
+   		for (int i = 0; descritor[i] != '\0'; i++){
+    		cabecalho(valores, descritor, bytes);
+  			
+  			valores++;
+  		}
+  	}*/
     
     /*while (nstructs--){
     	for (int i = 0; descritor[i] != '\0'; i++){
@@ -106,8 +179,8 @@ int gravacomp (int nstructs, void* valores, char* descritor, FILE* arq){
     	}
     }*/
     
-	return 1;
-}
+//	return 1;
+//}
 
 
 
