@@ -7,11 +7,11 @@ int main(){
 
 	//int num=2, i=0; //numero de arrays da estrutura
     int nstructs=2;
-    char descritor[6] = "is05u";
+    char descritor[6] = "is07u";
     Estrutura est[2];
     
-    est[0].i = 0xdf;
-    strcpy(est[0].s, "abcd");
+    est[0].i = 0xFEEa;
+    strcpy(est[0].s, "aaaa");
     est[0].u = 0x1b4;
     
     est[1].i = 250;

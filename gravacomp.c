@@ -94,8 +94,8 @@ int gravacomp (int nstructs, void* valores, char* descritor, FILE *arquivo){
 					c |= 0x80;								// c = 1000 0000.
 				
 				fwrite(&c, sizeof(char), 1, arquivo);
-			
 				valores = valores + (bytes - 1);			// faz valores apontar para o ultimo byte gravavel (mais signific)
+				
 				for (int i = 0; i < bytes; i++){
 					fwrite(valores, sizeof(char), 1 , arquivo);	// big endian
 					valores--;									//valores-- até apontar para uma pos antes do inicio
@@ -123,18 +123,16 @@ int gravacomp (int nstructs, void* valores, char* descritor, FILE *arquivo){
 				c |= bytes; 
 		
 				fwrite(&c, sizeof(char), 1 , arquivo); 		//escreve no arquivo cabecalho
+				
 			
 				for(int i = 0; i < bytes ; i ++) {
 					fwrite(valores, sizeof(char), 1 , arquivo ); 	//escreve no arquivo todos os campos da string
 					valores ++;
 				}
-			
-				valores = valores - bytes;
-			
-				char padding;
-				padding = (tamanho/4) * 4 + 4 - tamanho % 4 + 1;	// tamanho/4 dá um inteiro. é a qtd de bytes inteiros
-				valores = valores + padding ;						// ocupados. vezes 4 do padding. mais 4-tamanho mod 4 p/ 
-			}														// descobrir qts bytes de padding estao sozinhos. 
+				
+				valores = valores - bytes;							// volta para o inicio dos valores da string
+				valores = valores + tamanho + (4 - tamanho%4);	 	// vai para o primeiro endereço depois do fim da string 
+			}
 		}
 		nstructs--;
 	}
