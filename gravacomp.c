@@ -141,48 +141,6 @@ int gravacomp (int nstructs, void* valores, char* descritor, FILE *arquivo){
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//int gravacomp (int nstructs, void* valores, char* descritor, FILE* arq){
-
-    //fwrite(&nstructs_c, sizeof(char), 1, arq); 		// Primeiro byte do arquivo.
-    //unsigned char *cab;
-    //char bytes;
-    
-   	/*while (nstructs--){	
-   		
-   		for (int i = 0; descritor[i] != '\0'; i++){
-    		cabecalho(valores, descritor, bytes);
-  			
-  			valores++;
-  		}
-  	}*/
-    
-    /*while (nstructs--){
-    	for (int i = 0; descritor[i] != '\0'; i++){
-    		char bytes;
-    		cabecalho(valores,descritor,&bytes);
-    		valores++;
-    	}
-    }*/
-    
-//	return 1;
-//}
-
-
-
-
 //void mostracomp (FILE* arquivo);
 
 

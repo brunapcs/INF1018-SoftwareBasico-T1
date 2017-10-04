@@ -5,7 +5,6 @@
 
 int main(){
 
-	//int num=2, i=0; //numero de arrays da estrutura
     int nstructs=2;
     char descritor[6] = "is07u";
     Estrutura est[2];
