@@ -1,0 +1,2 @@
+Porque quando eu leio na fread mesmo com o o sizeof de char ele le ffffff82 ao inves de 82 (como estra escrito no arquivo)
+( isso para o numero -130) 
