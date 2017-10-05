@@ -1,8 +1,0 @@
-no caso de colocar um int 130:
-
-130 é 0000 0000 0000 0000 0000 0000 1000 0010
-
-porém, se eu for representar com um byte so, ficaria 1000 0010
-1000 0010 é 0111 1110 é -126. logo, precisaria de dois bytes para representar 130. 
-
-0000 0000 1000 0010. ficando com hexdump 82 00. certo??
