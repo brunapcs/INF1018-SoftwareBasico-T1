@@ -10,7 +10,7 @@ int main(){
     char descritor[6] = "is07u";
     Estrutura est[2];
     
-    est[0].i = 130;
+    est[0].i = 340;
     strcpy(est[0].s, "Oi ir");
     est[0].u = 255;
     

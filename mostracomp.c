@@ -39,29 +39,28 @@ void mostracomp (FILE *arq){
     else if(p>=0x20){ // SIGNED
         printf("(int)");
         numbytes = p - 0x20;
-        int num =0, i;
-        char aux;
         char def = 'n';
-        for( i = numbytes; i>0 ; i--){
+        int num = 0, i;
+        int aux =0;
+        for(i=numbytes; i>0 ; i--){
             fread(&aux, sizeof(char), sizeof(char) , arq);
-            if(i == numbytes ){  // checa o primeiro byte (mais sig) para ver se int eh positivo ou negativo
-               if( aux < 0x80)
-                def = 'p' ;                 // se positivo muda a definicao (def) para 'p'
+            if( i == numbytes ){
+                if(aux>0x80)
+                def = 'n';                           // se negativo muda a definicao (def) para 'n'
             }
-            printf("Aux lida: %02x\n", aux);
-                aux = ~aux;
-            printf("Aux negada: %02x\n", aux);
-                num = num <<8 ;
+                num = num << 8 ;
                 num = num | aux;
-            printf("Num %02x\n", num);
-            if(i == 1)
-                num ++;         //complemento a 2 no byte menos significativo
         }
-        if( def == 'p')
-          num = num * -1;
+        if( def == 'n') {
+            num =  num << (4-numbytes) * 8;
+            num = ~num;
+            num =  num >> (4-numbytes) * 8;
+            num ++;
+            num *= -1;         }
+       
         
-        printf("%d", num);
-        printf(" (%08x)", num);
+      printf("\n%d", num);
+      printf(" (%08x)", num);
     }
      
     else{                   //UNSIGNED, neste caso p ja contem o num de bytes gravado
