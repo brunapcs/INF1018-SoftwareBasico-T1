@@ -8,18 +8,16 @@ int main(){
     
     int nstructs=2;
     char descritor[6] = "is07u";
-    Estrutura est[2];
+    Estrutura valores[2];
     
-    est[0].i = 340;
-    strcpy(est[0].s, "Oi ir");
-    est[0].u = 255;
+    valores[0].i = -127;
+    strcpy(valores[0].s, "Oi ir");
+    valores[0].u = 255;
     
-    est[1].i = 250;
-    strcpy(est[1].s, "0123");
-    est[1].u = 1232436;
+    valores[1].i = 250;
+    strcpy(valores[1].s, "0123");
+    valores[1].u = 1232436;
     
-    
-    //printf("Oi");
     /***** [INÍCIO] Abertura do Arquivo Para Gravacao *****/
     
     FILE *file = fopen ("arquivo.txt", "wb");
@@ -30,7 +28,9 @@ int main(){
     
     /***** [FIM] Abertura do Arquivo *****/
     
-    gravacomp(nstructs, est, descritor, file);     
+    
+    gravacomp(nstructs, valores, descritor, file); 
+        
     fclose (file);
     
     
@@ -43,6 +43,7 @@ int main(){
     }
     
     /***** [FIM] Abertura do Arquivo *****/
+    
     mostracomp(file);
     
     fclose (file);
